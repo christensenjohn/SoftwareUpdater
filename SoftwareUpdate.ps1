@@ -57,9 +57,6 @@ Get-SoftwareUpdateConfig | Where-Object -FilterScript {(($_.OS -EQ 'ALL') -or ($
 }
 
 
-
-
-#$SoftwareToBeUpdated = 'VideoLanVlcPlayer'
 foreach ($SoftwareName in $SoftwareToBeUpdated) {
     $installparameter = (Get-SoftwareUpdateConfig | Where-Object -FilterScript {$_.software -eq $softwarename} | Select-Object SilentInstallation).SilentInstallation
  
