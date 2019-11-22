@@ -112,6 +112,8 @@ Get-SoftwareUpdateConfig | Where-Object -FilterScript {(($_.OS -EQ 'ALL') -or ($
     Set-SoftwareUpdateConfig -Software $_.Software -LocalVersion $LocalVersion
 }
 
+Get-ChildItem ".\Download" -Recurse -File | Where CreationTime -lt  (Get-Date).AddDays(-15)  | Remove-Item -Force
+
 Remove-Module SoftwareUpdater
 
 
