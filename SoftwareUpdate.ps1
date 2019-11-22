@@ -2,7 +2,7 @@
 #https://www.powershellgallery.com/profiles/aaronparker
 #https://www.powershellgallery.com/packages/Evergreen
 
-
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
  
 IF ([Environment]::OSVersion.Version -ge (new-object 'Version' 6,2)) {
 $osInstalled = "WIN10"
@@ -18,7 +18,7 @@ Update-Module evergreen -force
 
 
 Import-Module -Name 'EverGreen'
-Import-Module 'C:\scripts\SoftwareUpdater\output\SoftwareUpdater' -Force
+Import-Module 'C:\Program Files\SoftwareUpdater\Module\SoftwareUpdater' -Force
 
 
 
@@ -34,7 +34,7 @@ $LatestFilezilla = Get-FileZillaInstaller
 Set-SoftwareUpdateConfig -Software 'FileZilla' -LatestVersion $LatestFilezilla.Version 
 Set-SoftwareUpdateConfig -Software 'FileZilla' -DownloadURL $LatestFilezilla.URI 
 
-$LatestVideoLanVlcPlayer = Get-VideoLanVlcPlayer | Where-Object -FilterScript {($_.platform -eq 'windows')-and ($_.type -eq 'msi') -and $_.Architecture -eq 'x86'}
+$LatestVideoLanVlcPlayer = Get-VideoLanVlcPlayer | Where-Object -FilterScript {($_.platform -eq 'windows')-and ($_.type -eq 'exe') -and $_.Architecture -eq 'x86'}
 Set-SoftwareUpdateConfig -Software 'VideoLanVlcPlayer' -LatestVersion $LatestVideoLanVlcPlayer.Version 
 Set-SoftwareUpdateConfig -Software 'VideoLanVlcPlayer' -DownloadURL $LatestVideoLanVlcPlayer.URI 
 
@@ -97,7 +97,7 @@ foreach ($SoftwareName in $SoftwareToBeUpdated) {
         $result = (Invoke-DownloadFile -url $LatestVideoLanVlcPlayer.URI -destination ".\Download\$Softwarename") 
         if ($($result.DownloadFileStatus) -eq 'True'){
              Write-Output "Installing $($result.DownloadFileName)"
-            if (-not(Start-Update -InstallFilePath $($result.DownloadFileNamePath) -Parms $null)) {
+            if (-not(Start-Update -InstallFilePath $($result.DownloadFileNamePath) -Parms $installparameter)) {
                 Write-Output "Installation failed"
             }
         }
